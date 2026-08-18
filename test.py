@@ -43,25 +43,26 @@ import numpy as np
 #     return a + b
 
 
+def softmax(x):
+    e_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+    return e_x / np.sum(e_x, axis=-1, keepdims=True)
+
+
 def main() -> None:
     text = "What is the sum of 2 and 3?"
     model = Small_LLM_Model()
 
     tokens = model.encode(text)
+    logits = model.get_logits_from_input_ids(tokens[0].tolist())
 
-    for token in tokens[0]:
-        logits = model.get_logits_from_input_ids(token)
-        print(f"token: [{token.item()}] => Logits: [{logits}]")
+    # print(type(logits))
+    # print(len(logits))
+    # print(max(logits))
 
-    # print(tokens[0])
-    # print(tokens)
-    # print(model.decode(tokens))
-    # print("\n")
-    print(f"Logits: {len(logits)}")
+    probs = softmax(logits)
 
-
-# for token_id in ids[0]:
-#     print(token_id.item(), repr(model.decode([token_id.item()])))
+    # token_id = probs.argmax()
+    print(model.decode(probs.argmax()))
 
 
 # def main() -> None:
