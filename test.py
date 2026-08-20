@@ -51,18 +51,59 @@ def softmax(x):
 def main() -> None:
     text = "What is the sum of 2 and 3?"
     model = Small_LLM_Model()
+    for text in [
+        "What is the sum of 2 and 3?",
+        "What is the sum of 2 and 3?\n",
+        "What is the sum of 2 and 3? The answer is",
+    ]:
+        tokens = model.encode(text)
+        logits = np.array(model.get_logits_from_input_ids(tokens[0].tolist()))
+        token_id = np.argmax(logits)
+        print(f"{text!r} -> {model.decode([token_id])}")
 
-    tokens = model.encode(text)
-    logits = model.get_logits_from_input_ids(tokens[0].tolist())
 
+
+# def main() -> None:
+#     text = "What is the sum of 2 and 3?"
+#     model = Small_LLM_Model()
+
+#     tokens = model.encode(text)
+#     logits = model.get_logits_from_input_ids(tokens[0].tolist())
+#     logits_array = np.array(logits)
+    
+    
+#     next_token_id = np.argmax(logits_array)
+
+#     top_ids = np.argsort(logits_array)[-10:][::-1]
+
+#     for token_id in top_ids:
+#         print(
+#         token_id,
+#         model.decode([token_id]),
+#         logits_array[token_id]
+#     )
+
+    # 4. Decode the single token ID into text
+    # print(f"Predicted Token ID: {next_token_id}")
+    # print(f"Predicted Token Text: {model.decode([next_token_id])}")
+    
+    # print(type(logits))
+    # print(np.array(logits).shape)
+    # print(np.array(logits)[:10])
+    
+    
+    
     # print(type(logits))
     # print(len(logits))
     # print(max(logits))
 
-    probs = softmax(logits)
+    # probs = softmax(logits)
+    # probs = np.argmax(logits)
 
     # token_id = probs.argmax()
-    print(model.decode(probs.argmax()))
+    # print(probs)
+    # print(model.decode(probs.argmax()))
+    
 
 
 # def main() -> None:
